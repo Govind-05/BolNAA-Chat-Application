@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Main home design Starts Here */
+
+.home-container{
+    display: flex;
+    height: 45rem;
+    /* border: 4px solid red; */
+    width: 86rem;
+    background-color: #222831;
+    border-radius: 0px 12px 12px 0px;
+
+}
+/* Main home design Ends Here */
+
+/* Sidebar Styling Starts Here */
+
+.home-sidebar-container{
+    background-color: #393E46;
+    height: 100%;
+    /* border: 2px solid blue; */
+    width: 33%;
+}
+
+.sidebar-user-container{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    background-color: #222831;
+    border-top-left-radius: 12px;
+    /* border: 2px solid white; */
+}
+
+.user-profile{
+    box-shadow: 0 0 10px #9ecaed;
+    margin-left: 0.6rem;
+    border-radius: 50%;
+    width: 3rem;
+}
+
+.profile-name{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    text-shadow: 0 0 10px #000000;
+    color: #03C988;
+}
+
+.add-people-icon{
+    margin:0 1rem 0 auto;
+}
+
+.add-people-icon:hover{
+    cursor: pointer;
+    width: 55px;
+}
+
+.sidebar-chats-container{
+    width: 100%;
+    height: 90%;
+    /* border: 2px solid yellow; */
+    overflow-y: scroll;
+}
+
+.sidebar-chats-container::-webkit-scrollbar{
+    width: 10px;
+
+}
+
+.sidebar-chats-container::-webkit-scrollbar-track{
+    background: #393E46;
+}
+
+.sidebar-chats-container::-webkit-scrollbar-thumb{
+    background: #222831;
+}
+
+.chat-box{
+    display: flex;
+    align-items: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.chat-box:hover{
+    background-color: #222831;
+    cursor: pointer;
+}
+
+.chat-user-profile{
+    margin-left: 0.6rem;
+    border-radius: 50%;
+    width: 2.5rem;
+}
+
+.chat-profile-name{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-left: 0.7rem;
+    text-shadow: 0 0 10px #000000;
+    color: white;
+}
+
+.chat-bottom-border{
+    height: 1.5px;
+    background-color: #222831;
+    width: 95%;
+    margin: 0 auto 0 auto;
+}
+
+/* Sidebar Styling Ends Here */
+
+.home-chatbox-container{
+    
+    height: 100%;
+    /* border: 2px solid green; */
+    width: 67%;
+
+}
+
+.chatbox-welcome-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+    border-bottom: 8px solid #03C988;
+    border-radius: 0px 12px 12px 0px;
+
+}
+
+.chatbox-welcome-image{
+    width: 20rem;
+}
+
+.chatbox-welcome-message{
+    font-family: 'Bebas Neue', sans-serif;
+    color: white;
+    font-size: 2.5rem;
+    text-shadow: 0 0 16px black;
+}

@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fjalla+One&family=Lobster&family=Pacifico&display=swap');
+
+:root{
+    --bgColor:#393E46;
+}
+
+.title{
+    font-family: 'Pacifico', cursive;
+    font-size: 5rem;
+    display: block;
+    color: #03C988;
+}
+
+.login-container img{
+    width: 4rem;
+    transition: all 1s;
+}
+
+
+.login-container img:hover{
+    cursor: pointer;
+    transform: rotate(360deg);
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form input{
+    width: 30rem;
+    height: 2.5rem;
+    outline: none;
+    border-radius: 0.8rem;
+    font-size: 1.5rem;
+    padding-left: 0.5rem;
+    margin-bottom:0.5rem;
+}
+
+.login-form input::placeholder{
+    font-size: 1rem;
+}
+
+.username-error{
+    font-size: 0.9rem;
+    color: #ffabab;
+    padding: 0 0 0 5px;
+}
+
+.password-error{
+    color:red;
+    font-size: 10px;
+}
+
+.login-buttons-container{
+    display: flex;
+    flex-direction: column;
+    position:relative;
+    top:1rem
+}
+
+.login-buttons-container button{
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    outline: none;
+    border: none;
+}
+
+.login-buttons-container button:hover{
+    cursor: pointer;
+}
+
+.login-submit-button{
+    margin: 0rem 0 0 0.5rem;
+    width: 29rem;
+    background-color: #03C988;
+}
+
+.login-submit-button:hover{
+    box-shadow: 0 0 10px #EEEEEE;
+}
+
+.login-create-button{
+    background-color: #EEEEEE;
+}
+
+.login-create-button:hover{
+    box-shadow: 0 0 10px #00ADB5;
+
+}
+
+.signup-login-link{
+    font-size: 0.8rem;
+    padding: 5px 0 0 0.8rem;
+    color: #dbdbff;
+}
+
+.signup-login-link:hover{
+    cursor: pointer;
+    color: #8ae2ff;
+}
