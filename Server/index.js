@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import User from "./database/models/userSchema.js";
 import Message from "./database/models/messagesSchema.js";
+import cors from "cors";
 import * as dotenv from 'dotenv';
 dotenv.config()
 
@@ -20,6 +21,7 @@ const io = new Server(httpServer, {
 
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -158,8 +160,12 @@ io.on("connection", (socket) => {
 
 // Socket Server Ends here
 
-httpServer.listen(5000);
+const SERVER_PORT=process.env.SERVER_PORT || 5000
 
-app.listen("3000", () => {
-    console.log("Server is listening on port 3000.");
+httpServer.listen(SERVER_PORT);
+
+const PORT=process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}.`);
 });

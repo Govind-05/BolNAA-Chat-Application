@@ -2,6 +2,8 @@ import { useState } from "react";
 import SocketContext from "./SocketContext";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
+import * as dotenv from 'dotenv';
+dotenv.config()
 
 export default function SocketProvider(props) {
 
@@ -9,7 +11,7 @@ export default function SocketProvider(props) {
 
     useEffect(() => {
 
-        const newSocket = io("http://localhost:5000", {
+        const newSocket = io(`http://localhost:${process.env.SERVER_PORT}`, {
             query:{id:props.id} 
         })
 
