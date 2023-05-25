@@ -46,6 +46,10 @@ app.post("/post/register", async (req, res) => {
     }
 });
 
+app.get("/hello",(req,res)=>{
+    res.send("Hello there")
+});
+
 //LOGGING IN THE USER
 app.post("/post/login", async (req, res) => {
 
