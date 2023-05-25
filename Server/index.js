@@ -10,20 +10,15 @@ dotenv.config()
 import { createServer } from "http";
 import { Server } from "socket.io";
 
-const httpServer = createServer();
-const io = new Server(httpServer, {
-    cors: {
-        origin: ["http://127.0.0.1:5173"]
-    }
-});
-
-
-
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
+
 
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGODB_URL);
@@ -160,12 +155,12 @@ io.on("connection", (socket) => {
 
 // Socket Server Ends here
 
-const SERVER_PORT=process.env.SERVER_PORT || 5000
+const SERVER_PORT=process.env.SERVER_PORT || 3000
 
 httpServer.listen(SERVER_PORT);
 
-const PORT=process.env.PORT || 3000;
+// const PORT=process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}.`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server is listening on port ${PORT}.`);
+// });

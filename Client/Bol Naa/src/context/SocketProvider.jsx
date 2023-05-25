@@ -2,16 +2,17 @@ import { useState } from "react";
 import SocketContext from "./SocketContext";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
-import * as dotenv from 'dotenv';
-dotenv.config()
+
 
 export default function SocketProvider(props) {
 
-    const [socket, setSocket] = useState()
+    const DOMAIN=process.env.REACT_APP_PROXY_DOMAIN;
+
+    const [socket, setSocket] = useState();
 
     useEffect(() => {
 
-        const newSocket = io(`http://localhost:${process.env.SERVER_PORT}`, {
+        const newSocket = io(`${DOMAIN}`, {
             query:{id:props.id} 
         })
 
