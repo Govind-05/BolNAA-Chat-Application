@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import User from "./database/models/userSchema.js";
 import Message from "./database/models/messagesSchema.js";
+import * as dotenv from 'dotenv';
+dotenv.config()
 
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -22,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
 mongoose.set('strictQuery', true);
-mongoose.connect('mongodb://localhost:27017/bolnaaDB');
+mongoose.connect(process.env.MONGODB_URL);
 
 //REGISTERING THE USER
 app.post("/post/register", async (req, res) => {
