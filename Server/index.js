@@ -5,7 +5,7 @@ import User from "./database/models/userSchema.js";
 import Message from "./database/models/messagesSchema.js";
 import cors from "cors";
 import * as dotenv from 'dotenv';
-dotenv.config()
+dotenv.config();
 
 import { createServer } from "http";
 import { Server } from "socket.io";
