@@ -21,7 +21,9 @@ const io = new Server(httpServer);
 
 
 mongoose.set('strictQuery', true);
-mongoose.connect(process.env.MONGODB_URL);
+mongoose.connect(process.env.MONGODB_URL,()=>{
+    console.log("Mongo Connected");
+});
 
 //REGISTERING THE USER
 app.post("/post/register", async (req, res) => {
