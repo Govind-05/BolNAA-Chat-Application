@@ -102,6 +102,7 @@ export default function MessageBox(props) {
 
             async function getMessages() {
                 const messages = await getAllMessages(socketValues.id, userName);
+                console.log(messages);
                 messages.map((messageData) => {
                     if (messageData.sender === socketValues.id && messageData.receiver === userName) {
                         addMessageToConversation(true, messageData.message);
