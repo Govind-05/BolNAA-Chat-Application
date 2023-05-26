@@ -50,7 +50,7 @@ export default function MessageBox(props) {
             }
         })
 
-        
+
 
         return () => socket.off("received-message")
     }, [socket, addMessageToConversation])
@@ -88,7 +88,7 @@ export default function MessageBox(props) {
 
     }
 
-    
+
 
     async function getMessages() {
         const messages = await getAllMessages(socketValues.id, userName);
@@ -103,18 +103,18 @@ export default function MessageBox(props) {
         Scroll();
     }
     useEffect(() => {
-        if (initialRenderRef.current) {
-            initialRenderRef.current = false;
-        } else {
-            const msgContainer = document.getElementById("conversations-container");
+        // if (initialRenderRef.current) {
+        //     initialRenderRef.current = false;
+        // } else {
+        const msgContainer = document.getElementById("conversations-container");
 
-            while (msgContainer.hasChildNodes()) {
-                msgContainer.removeChild(msgContainer.firstChild);
-            }
-            getMessages();
-            
-            setSendMes("");
+        while (msgContainer.hasChildNodes()) {
+            msgContainer.removeChild(msgContainer.firstChild);
         }
+        getMessages();
+
+        setSendMes("");
+        // }
     }, [userName]);
 
     return (
