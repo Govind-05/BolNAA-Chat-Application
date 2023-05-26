@@ -3,6 +3,7 @@ import axios from "axios"
 import SocketContext from "../context/SocketContext";
 
 
+
 export default function AddPeopleModal(props) {
 
 
@@ -20,7 +21,7 @@ export default function AddPeopleModal(props) {
 
     async function handleSubmitModal() {
 
-        const response = await axios.post("/post/checkUser", {
+        const response = await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/checkUser`, {
             userName: userRef.current.value
         }, {
             headers: {
@@ -41,7 +42,7 @@ export default function AddPeopleModal(props) {
                 [...alreadyUsers, { userName: userRef.current.value }]
             )
 
-            await axios.post("/post/saveContacts", {
+            await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/saveContacts`, {
                 user: id,
                 userName: userRef.current.value
             }, {

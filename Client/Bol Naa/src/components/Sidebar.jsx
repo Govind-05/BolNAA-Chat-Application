@@ -5,6 +5,7 @@ import SocketContext from "../context/SocketContext";
 import axios from "axios";
 
 
+
 export default function Sidebar(props) {
 
     const profile = useContext(UserContext);
@@ -32,7 +33,7 @@ export default function Sidebar(props) {
 
     useEffect(() => {
         async function addContacts() {
-            const contacts = await axios.post("/post/fetchContacts", {
+            const contacts = await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/fetchContacts`, {
                 userName: id,
             }, {
                 headers: {

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export default function SocketProvider(props) {
 
-    const DOMAIN=process.env.REACT_APP_PROXY_DOMAIN;
+    const DOMAIN=import.meta.env.VITE_APP_PROXY_DOMAIN;
 
     const [socket, setSocket] = useState();
 

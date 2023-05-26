@@ -3,6 +3,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../context/userContext';
 
+
 export default function Login(props){
 
     const profile=useContext(UserContext);
@@ -68,7 +69,7 @@ export default function Login(props){
         e.preventDefault();
 
         if(e.target["userName"].value!="" &&e.target["password"].value!=""){
-            const response=await axios.post("/post/login",{
+            const response=await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/login`,{
                 userName:e.target["userName"].value,
                 password:e.target["password"].value
             },
@@ -130,7 +131,7 @@ export default function Login(props){
     async function handleSubmitRegisterForm(e){
         e.preventDefault();
 
-        const response=await axios.post("/post/register",{
+        const response=await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/register`,{
             yourName:e.target["yourName"].value,
             userName:e.target["userName"].value,
             password:e.target["password"].value,

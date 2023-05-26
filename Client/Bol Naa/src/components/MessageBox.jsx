@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import SocketContext from "../context/SocketContext";
 import axios from "axios";
 
+
 export default function MessageBox(props) {
 
     const { userName } = props;
@@ -58,7 +59,7 @@ export default function MessageBox(props) {
         e.preventDefault();
         socket.emit("send-message", { userName, sendMes, sender: socketValues.id });
         addMessageToConversation(true, sendMes)
-        const response = await axios.post("/post/addMessages", {
+        const response = await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/addMessages`, {
             sender: socketValues.id,
             receiver: userName,
             message: sendMes
@@ -73,7 +74,7 @@ export default function MessageBox(props) {
     }
 
     async function getAllMessages(sender, receiver) {
-        const messages = await axios.post("/post/fetchMessages", {
+        const messages = await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/fetchMessages`, {
             sender: sender,
             receiver: receiver,
         },
