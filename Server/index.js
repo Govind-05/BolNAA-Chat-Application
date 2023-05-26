@@ -16,7 +16,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+    cors: {
+      origin: process.env.CLIENT_DOMAIN,
+      methods: ["GET", "POST"]
+    }
+});
 
 
 
