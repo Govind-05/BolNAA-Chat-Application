@@ -90,6 +90,18 @@ export default function MessageBox(props) {
 
     
 
+    async function getMessages() {
+        const messages = await getAllMessages(socketValues.id, userName);
+        console.log(messages);
+        messages.map((messageData) => {
+            if (messageData.sender === socketValues.id && messageData.receiver === userName) {
+                addMessageToConversation(true, messageData.message);
+            } else if (messageData.sender === userName && messageData.receiver === socketValues.id) {
+                addMessageToConversation(false, messageData.message);
+            }
+        })
+        Scroll();
+    }
     useEffect(() => {
         if (initialRenderRef.current) {
             initialRenderRef.current = false;
@@ -99,22 +111,8 @@ export default function MessageBox(props) {
             while (msgContainer.hasChildNodes()) {
                 msgContainer.removeChild(msgContainer.firstChild);
             }
-
-            async function getMessages() {
-                const messages = await getAllMessages(socketValues.id, userName);
-                console.log(messages);
-                messages.map((messageData) => {
-                    if (messageData.sender === socketValues.id && messageData.receiver === userName) {
-                        addMessageToConversation(true, messageData.message);
-                    } else if (messageData.sender === userName && messageData.receiver === socketValues.id) {
-                        addMessageToConversation(false, messageData.message);
-                    }
-                })
-                Scroll();
-            }
-
-
             getMessages();
+            
             setSendMes("");
         }
     }, [userName]);
