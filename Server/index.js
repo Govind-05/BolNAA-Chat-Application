@@ -26,7 +26,7 @@ const io = new Server(httpServer, {
 
 
 mongoose.set('strictQuery', true);
-mongoose.connect('mongodb://127.0.0.1:27017/bolnaaDB');
+mongoose.connect(process.env.MONGODB_URL);
 
 //REGISTERING THE USER
 app.post("/post/register", async (req, res) => {
