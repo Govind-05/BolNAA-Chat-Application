@@ -1,0 +1,41 @@
+@media (max-width:374px) and (min-width:280px) {
+    /* login style sheet */
+    .title {
+        font-size: 3rem;
+    }
+
+    .login-container img {
+        width: 2.5rem;
+    }
+
+    .login-form{
+        align-items: center;
+    }
+
+    .login-form input {
+        width: 17rem;
+        height: 2rem;
+        outline: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        padding-left: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-buttons-container{
+        top:0.5rem
+    }
+
+    .login-submit-button{
+        width: 17rem;
+        margin: 0;
+        height: 2.5rem;
+    }
+
+    .register-button{
+        width: 17rem;
+        margin: 0;
+        height: 2.5rem;
+    }
+
+}

@@ -1,0 +1,88 @@
+@media (max-width:768px) and (min-width:375px) {
+    /* login style sheet */
+    .title {
+        font-size: 4rem;
+    }
+
+    .login-container img {
+        width: 3.5rem;
+    }
+
+    .login-form input {
+        width: 22rem;
+        height: 2rem;
+        outline: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        padding-left: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-buttons-container{
+        top:0.5rem
+    }
+
+    .login-submit-button{
+        width: 21rem;
+    }
+
+    .register-button{
+        width: 22rem;
+    }
+
+}
+
+@media (orientation:portrait){
+    .home-container{
+        flex-direction: column;
+        width: 90vw;
+    }
+    
+    .home-sidebar-container{
+        height: 33%;
+        width: 100%;
+    }
+
+    .sidebar-user-container{
+        height: 25%;
+        max-height:4rem;
+    }
+
+    .sidebar-chats-container{
+        border-left: 2px solid #222831;
+        border-right: 2px solid #222831;
+        height: 75%;
+    }
+
+    .chat-bottom-border{
+        margin-top: 2px;
+    }
+
+    .home-chatbox-container{
+        width: 100%;
+        background-color: #222831
+    }
+
+    .message-box-container{
+        overflow-y: hidden;
+        overflow-x: hidden;
+        height: 90%;
+    }
+
+    .send-message-container input{
+        width: 88%;
+        height: 90%;
+        margin-left: 2%;
+    }
+
+    .send-message-container{
+        height: 10%;
+        max-height: 3rem;
+    }
+
+    .send-message-container form{
+        display: flex;
+        align-items: center;
+        height:100%
+    }
+}

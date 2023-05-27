@@ -1,0 +1,12 @@
+@media (max-width:1440px) and (min-width:1280px) {
+    .home-container{
+        width: 90vw;
+    }
+}
+
+@media (max-width:1279px) and (min-width:980px) {
+    
+    .home-container{
+        width: 90vw;
+    }
+}

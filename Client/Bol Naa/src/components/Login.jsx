@@ -215,7 +215,7 @@ export default function Login(props){
                     <input type="password" style={cPassBorder} placeholder='Confirm Password' name='confirmPassword' required={true} value={input.confirmPassword} onChange={handlePassword}/>
                     {userNameError?<span className='username-error'>*Username already exists. Try Another</span>:<span></span>}
                     <div className="login-buttons-container">
-                    <button className="login-create-button" disabled={disableForm} style={registerButtonStyle} >Register</button>
+                    <button className="register-button" disabled={disableForm} style={registerButtonStyle} >Register</button>
                     <span className='signup-login-link' ref={loginRef} onClick={changeLoginForm}>Already have an Account? Click Here</span>
                     </div>
 
