@@ -26,7 +26,7 @@ const io = new Server(httpServer, {
 
 
 mongoose.set('strictQuery', true);
-mongoose.connect(process.env.MONGODB_URL);
+mongoose.connect('mongodb://127.0.0.1:27017/bolnaaDB');
 
 //REGISTERING THE USER
 app.post("/post/register", async (req, res) => {
@@ -147,6 +147,32 @@ app.post("/post/fetchMessages", async (req, res) => {
     res.send({messages:messages})
 });
 
+app.post("/post/deleteContact",async (req,res) => {
+    try {
+        
+        const response=await User.findOne({userName:req.body.sender});
+        
+        const prevContacts=response.contacts;
+        let newContacts=[];
+        newContacts=prevContacts.filter(user=>{
+                if(user.userName!==req.body.userName){
+                    return user;
+                }
+            
+        });
+
+        const delResponse=await User.findOneAndUpdate({userName:req.body.sender},{contacts:newContacts});
+        await Message.deleteMany({ $or: [{ sender: req.body.sender }, { sender: req.body.userName }],$or: [{ receiver: req.body.userName }, { receiver: req.body.sender }] })
+        
+        // res.send({msg:"messages deleted"});
+        
+        res.send({msg:"Contact Deleted"})
+
+
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 //Socket Server Starts here
 io.on("connection", (socket) => {

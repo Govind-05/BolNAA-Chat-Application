@@ -112,6 +112,18 @@
     color: white;
 }
 
+.delete-user{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
+    color:#393E46 ;
+}
+
+.delete-user:hover{
+    color: red;
+}
+
 .chat-bottom-border{
     height: 1.5px;
     background-color: #222831;
