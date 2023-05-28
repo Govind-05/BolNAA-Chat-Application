@@ -112,10 +112,12 @@ app.post("/post/saveContacts",async (req,res)=>{
 });
 
 app.post("/post/fetchContacts",async (req,res)=>{
-    const data=await User.findOne({userName:req.body.userName}).exec();
-    res.send({
-        contacts:data.contacts
-    })
+    if(req.body.userName!==""){
+        const data=await User.findOne({userName:req.body.userName}).exec();
+        res.send({
+            contacts:data.contacts
+        })
+    }
 });
 
 app.post("/post/addMessages", async (req, res) => {

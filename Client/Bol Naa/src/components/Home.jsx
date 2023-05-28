@@ -9,16 +9,18 @@ import SocketProvider from "../context/SocketProvider";
 export default function Home(props) {
 
   const { isLogin } = props;
+  // const { setIsLogin } = props.setIsLogin;
   const [userSelected, setUserSelected] = useState({
     selected: false,
     userName: ""
   });
-
+  
   const navigate = useNavigate();
   useEffect(() => {
     if (!isLogin.loginState) {
       navigate("/");
-    }
+    } 
+    
   }, [])
 
 

@@ -22,7 +22,7 @@ function App() {
       element: <Login setIsLogin={setIsLogin} />,
     }, {
       path: "/home",
-      element: <Home isLogin={isLogin} />
+      element: <Home isLogin={isLogin} setIsLogin={setIsLogin}/>
     }
   ]);
 
