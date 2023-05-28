@@ -118,6 +118,7 @@ app.post("/post/fetchContacts",async (req,res)=>{
             contacts:data.contacts
         })
     }
+    
 });
 
 app.post("/post/addMessages", async (req, res) => {
