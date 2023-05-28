@@ -201,7 +201,7 @@ export default function Login(props){
                     <form className="login-form" onSubmit={handleSubmitLoginForm}>
                     <input type="text" minLength="6" autoCorrect="off" autoComplete="off" placeholder='UserName' name="userName" value={loginData.userName} onChange={changeLoginInfo}/>
                     <input type="password" placeholder='Password' name='password' value={loginData.password} onChange={changeLoginInfo}/>
-                    {loginError?<span className='username-error'>*Invalid Credentials. Try Again</span>:<span></span>}
+                    {loginError?<span className='username-error'>*Invalid Credentials. Try Again</span>:<span className='username-error'>UserName: test123 Password: test123 (for test purpose)</span>}
                     <div className="login-buttons-container">
                     <button className="login-submit-button">Login</button>
                     <span className='signup-login-link' onClick={changeLoginForm}>New Here? Create Your Account Now</span>
