@@ -43,9 +43,7 @@ export default function Sidebar(props) {
         setPeopleAdded(beforePeople.concat(afterPeople));
     }
     useEffect(() => {
-        if(id!==""){
             addContacts();
-        }
     }, []);
 
 
