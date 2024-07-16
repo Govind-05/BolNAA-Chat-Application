@@ -15,11 +15,6 @@ export default function Login(props){
     const {setProfile}=useContext(UserContext);
     
     const [open, setOpen] = useState(false);
-    
-    const [input,setInput]=useState({
-        password:"",
-        confirmPassword:""
-    });
 
     const[loginData,setLoginData]=useState({
         userName:"",
@@ -39,6 +34,11 @@ export default function Login(props){
         yourName:"",
         userName:""
     });
+
+    const [input,setInput]=useState({
+        password:"",
+        confirmPassword:""
+    });
     
     const [userNameError,setuserNameError]=useState(false);
 
@@ -51,8 +51,20 @@ export default function Login(props){
 
     function changeLoginForm(){
         if(loginForm){
+            setLoginData({
+                userName:"",
+                password:""
+            })
             setLoginForm(false);
         }else{
+            setRegisterData({
+                yourName:"",
+                userName:""
+            })
+            setInput({
+                password:"",
+                confirmPassword:""
+            })
             setLoginForm(true);
         }
     }
@@ -216,7 +228,7 @@ export default function Login(props){
                 :
                 <form className="login-form" onSubmit={handleSubmitRegisterForm}>
                     <input className="focus:border-green-400 focus:border-2" type="text" autoCorrect="off" autoComplete='off' placeholder='Your Name' name="yourName" required={true} value={registerData.yourName} onChange={changeRegisterationInfo}/>
-                    <input className="focus:border-green-400 focus:border-2" type="text" minLength="4" autoCorrect="off" autoComplete='off' placeholder='UserName (Min. Length is 6)' name="userName" required={true} value={registerData.userName} onChange={changeRegisterationInfo}/>
+                    <input className="focus:border-green-400 focus:border-2" type="text" minLength="4" autoCorrect="off" autoComplete='off' placeholder='UserName (Min. Length is 4)' name="userName" required={true} value={registerData.userName} onChange={changeRegisterationInfo}/>
                     <input  className="focus:border-green-400 focus:border-2" type="password" placeholder='Password' name='password' required={true} value={input.password} onChange={handlePassword}/>
                     <input type="password" style={cPassBorder} placeholder='Confirm Password' name='confirmPassword' required={true} value={input.confirmPassword} onChange={handlePassword}/>
                     {userNameError?<span className='username-error'>*Username already exists. Try Another</span>:<span></span>}
