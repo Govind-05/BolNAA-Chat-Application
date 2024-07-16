@@ -8,7 +8,7 @@ export default function SocketProvider(props) {
 
     const DOMAIN=import.meta.env.VITE_APP_PROXY_DOMAIN;
 
-    const [socket, setSocket] = useState();
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
 
@@ -17,7 +17,9 @@ export default function SocketProvider(props) {
         })
 
         setSocket(newSocket);
-        return ()=>newSocket.close();
+        return () => {
+            if (newSocket) newSocket.close();
+        };
     }, [props.id])
 
     return (
