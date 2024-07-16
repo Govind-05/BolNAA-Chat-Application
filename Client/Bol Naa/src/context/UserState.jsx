@@ -3,7 +3,7 @@ import UserContext from "./userContext";
 
 export default function UserState(props){
 
-    const [profile,setProfile]=useState("Govind")
+    const [profile,setProfile]=useState("")
 
     return(
         <>
