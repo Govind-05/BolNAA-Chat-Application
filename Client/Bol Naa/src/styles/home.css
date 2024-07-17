@@ -133,13 +133,6 @@
 
 /* Sidebar Styling Ends Here */
 
-.home-chatbox-container{
-    
-    height: 100%;
-    /* border: 2px solid green; */
-    width: 67%;
-
-}
 
 .chatbox-welcome-container{
     display: flex;

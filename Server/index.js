@@ -64,7 +64,11 @@ app.post("/post/login", async (req, res) => {
         }
         else if (response.password === req.body.password) {
             res.send({
-                error: false
+                error: false,
+                profile:{
+                    userName:response.userName,
+                    yourName:response.yourName
+                }
             })
         } else {
             res.send({

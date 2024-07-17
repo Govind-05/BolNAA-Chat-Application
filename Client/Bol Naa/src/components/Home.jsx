@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Chatbox from './Chatbox';
 import SocketProvider from "../context/SocketProvider";
+import SideInfoBar from './SideInfoBar';
 
 
 
@@ -27,8 +28,9 @@ export default function Home(props) {
   return (
     <>
       <SocketProvider id={isLogin.userName}>
-        <div className='home-container'>
+        <div className='flex h-screen w-screen'>
           <Sidebar setUserSelected={setUserSelected} />
+          <SideInfoBar />
           <Chatbox userSelected={userSelected} />
         </div>
       </SocketProvider>
