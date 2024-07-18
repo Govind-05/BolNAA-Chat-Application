@@ -7,9 +7,9 @@ const userSchema = new Schema({
     userName:{ type : String , unique : true, required : true, dropDups: true },
     password:String,
     contacts:[{
-        userName : String
+        userId : mongoose.Schema.Types.ObjectId
     }]
-});
+},{ timestamps: true });
 
 const User=mongoose.model("User",userSchema);
 

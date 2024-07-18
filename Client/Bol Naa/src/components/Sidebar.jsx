@@ -4,6 +4,7 @@ import AddPeopleModal from './AddPeopleModal';
 import SocketContext from "../context/SocketContext";
 import { IoMenu } from "react-icons/io5";
 import axios from "axios";
+import SidebarContext from '../context/SidebarContext';
 
 
 
@@ -12,6 +13,7 @@ export default function Sidebar(props) {
     const { setUserSelected } = props;
 
     const profile = useContext(UserContext);
+    const {setSidebarNavigation} = useContext(SidebarContext)
 
     const [addModal, setAddModal] = useState(false);
 
@@ -109,19 +111,19 @@ export default function Sidebar(props) {
                 </div>
                 <div className="grow">
                     <ul className="h-full flex flex-col">
-                        <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md">
+                        <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md" onClick={()=>setSidebarNavigation("chats")}>
                             <i class="fa-solid fa-comment-dots text-gray-300 text-md p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Chats</span></i>
                         </li>
-                        <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md">
+                        <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md" onClick={()=>setSidebarNavigation("userRequests")}>
                             <i class="fa-solid fa-users text-gray-300 text-md p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>User Requests/Invite</span></i>
                         </li>
-                        <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md">
+                        <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md" onClick={()=>setSidebarNavigation("userProfile")}>
                             <i class="fa-solid fa-user-gear text-gray-300 text-md p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Profile</span></i>
                         </li>
-                        <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md">
+                        <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md" onClick={()=>setSidebarNavigation("notifications")}>
                             <i class="fa-solid fa-bell text-gray-300 text-md p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Notifications</span></i>
                         </li>
-                        <li className="mt-auto mb-2 hover:bg-slate-600 cursor-pointer m-1 rounded-md">
+                        <li className="mt-auto mb-2 hover:bg-slate-600 cursor-pointer m-1 rounded-md" onClick={()=>setSidebarNavigation("settings")}>
                             <i class="fa-solid fa-gear text-gray-300 text-lg p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Settings</span></i>
                         </li>
                     </ul>

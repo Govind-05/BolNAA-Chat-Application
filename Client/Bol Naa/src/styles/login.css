@@ -78,10 +78,6 @@
     background-color: #03C988;
 }
 
-.login-submit-button:hover{
-    box-shadow: 0 0 10px #EEEEEE;
-}
-
 .login-create-button{
     background-color: #EEEEEE;
 }

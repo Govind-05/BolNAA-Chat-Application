@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import Chatbox from './Chatbox';
 import SocketProvider from "../context/SocketProvider";
 import SideInfoBar from './SideInfoBar';
+import SidebarState from '../context/SidebarState';
 
 
 
@@ -29,8 +30,12 @@ export default function Home(props) {
     <>
       <SocketProvider id={isLogin.userName}>
         <div className='flex h-screen w-screen'>
-          <Sidebar setUserSelected={setUserSelected} />
-          <SideInfoBar />
+
+          <SidebarState>
+            <Sidebar setUserSelected={setUserSelected} />
+            <SideInfoBar />
+          </SidebarState>
+
           <Chatbox userSelected={userSelected} />
         </div>
       </SocketProvider>

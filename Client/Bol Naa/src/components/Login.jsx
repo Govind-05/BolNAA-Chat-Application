@@ -219,8 +219,8 @@ export default function Login(props){
                 <span className='title flex items-center hover:cursor-default'><img className="title-icon" src="/images/logo.png" alt="" />BolNAA</span>
                 {loginForm?
                     <form className="login-form" onSubmit={handleSubmitLoginForm}>
-                    <input className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold" type="text" minLength="4" autoCorrect="off" autoComplete="off" placeholder='UserName' name="userName" value={loginData.userName} onChange={changeLoginInfo}/>
-                    <input className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold" type="password" placeholder='Password' name='password' value={loginData.password} onChange={changeLoginInfo}/>
+                    <input className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold bg-black" type="text" minLength="4" autoCorrect="off" autoComplete="off" placeholder='UserName' name="userName" value={loginData.userName} onChange={changeLoginInfo}/>
+                    <input className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold bg-black" type="password" placeholder='Password' name='password' value={loginData.password} onChange={changeLoginInfo}/>
                     {loginError?<span className='username-error'>*Invalid Credentials. Try Again</span>:<span className='username-error flex items-center hover:cursor-pointer' onClick={handleOpen}><img src="/images/info.svg" alt="info icon" className="h-6 w-6 mr-2" /> GET LOGIN CREDENTIALS</span>}
                     <div className="login-buttons-container">
                     <button className="login-submit-button" type={(loginData.userName===""||loginData.password==="")?"button":"submit"} style={{backgroundColor:(loginData.userName===""||loginData.password==="")&&"grey",boxShadow:(loginData.userName===""||loginData.password==="")&&"none",cursor:(loginData.userName===""||loginData.password==="")&&"not-allowed"}}>Login</button>
@@ -229,10 +229,10 @@ export default function Login(props){
                 </form>
                 :
                 <form className="login-form" onSubmit={handleSubmitRegisterForm}>
-                    <input className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold" type="text" autoCorrect="off" autoComplete='off' placeholder='Your Name' name="yourName" required={true} value={registerData.yourName} onChange={changeRegisterationInfo}/>
-                    <input className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold" type="text" minLength="4" autoCorrect="off" autoComplete='off' placeholder='UserName (Min. Length is 4)' name="userName" required={true} value={registerData.userName} onChange={changeRegisterationInfo}/>
-                    <input  className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold" type="password" placeholder='Password' name='password' required={true} value={input.password} onChange={handlePassword}/>
-                    <input className="text-gray-400 font-semibold" type="password" style={cPassBorder} placeholder='Confirm Password' name='confirmPassword' required={true} value={input.confirmPassword} onChange={handlePassword}/>
+                    <input className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold bg-black" type="text" autoCorrect="off" autoComplete='off' placeholder='Your Name' name="yourName" required={true} value={registerData.yourName} onChange={changeRegisterationInfo}/>
+                    <input className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold bg-black" type="text" minLength="4" autoCorrect="off" autoComplete='off' placeholder='UserName (Min. Length is 4)' name="userName" required={true} value={registerData.userName} onChange={changeRegisterationInfo}/>
+                    <input  className="focus:border-green-400 focus:border-2 text-gray-400 font-semibold bg-black" type="password" placeholder='Password' name='password' required={true} value={input.password} onChange={handlePassword}/>
+                    <input className="text-gray-400 font-semibold bg-black" type="password" style={cPassBorder} placeholder='Confirm Password' name='confirmPassword' required={true} value={input.confirmPassword} onChange={handlePassword}/>
                     {userNameError?<span className='username-error'>*Username already exists. Try Another</span>:<span></span>}
                     <div className="login-buttons-container">
                     <button className="register-button" disabled={disableForm} style={registerButtonStyle} >Register</button>
