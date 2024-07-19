@@ -36,7 +36,7 @@ export default function Home(props) {
             <SideInfoBar />
           </SidebarState>
 
-          <Chatbox userSelected={userSelected} />
+          <Chatbox />
         </div>
       </SocketProvider>
 
