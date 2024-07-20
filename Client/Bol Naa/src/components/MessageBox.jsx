@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import SocketContext from "../context/SocketContext";
+import UserContext from '../context/userContext';
 import EmojiPicker from 'emoji-picker-react';
 import DOMPurify from 'dompurify';
 import axios from "axios";
@@ -118,10 +119,16 @@ export default function MessageBox(props) {
     //     setSendMes("");
     //     // }
     // }, [userName]);
+    
+  
+    const {setShowMessageBox} = useContext(UserContext);
+    
     const emojiPickerRef = useRef(null)
     const textInputRef = useRef(null)
+
     const [emojiPickerState,setEmojiPickerState] =useState(false)
     const [textInput,setTextInput] =useState("")
+    const [messagesArray, setMessagesArray] = useState([]);
 
     const handleEmojiInsert = (emojiData) => {
         const content=textInputRef.current.innerHTML
@@ -141,6 +148,14 @@ export default function MessageBox(props) {
     const handleInput = (event) => {
         const content = event.target.innerHTML;
         setTextInput(content);
+    };
+
+    const addMessage = () => {
+        if (textInput.trim() === '') return;
+
+        setMessagesArray([...messagesArray, textInput]);
+        setTextInput('');
+        textInputRef.current.innerHTML = '';
     };
 
     useEffect(() => {
@@ -181,17 +196,56 @@ export default function MessageBox(props) {
                 <div className="flex border-b-2 border-black items-center">
                     <img src="/images/User_profile.jpg" alt="profile" className="h-12 w-12 rounded-full m-2"/>
                     <span className="text-white text-xl font-semibold">Govind</span>
+                    <div className="ml-auto mr-2 p-1 pl-3 pr-2 hover:bg-slate-600 rounded-md cursor-pointer" onClick={()=>setShowMessageBox(false)} >
+                        <i className="fa-solid fa-location-arrow rotate-[230deg] text-white text-2xl "></i>
+                    </div>
                 </div>
-                <div className="flex-grow bg-contain" style={{backgroundImage:"linear-gradient(rgb(20 23 36 / 90%), rgb(0 0 0 / 90%)), url(/images/chat_background.jpg)"}}>
+
+                <div className="flex-grow bg-contain overflow-auto" style={{backgroundImage:"linear-gradient(rgb(20 23 36 / 90%), rgb(0 0 0 / 90%)), url(/images/chat_background.jpg)"}}>
+
+                    <ul className="">
+                        {/* <li className="bg-green-700 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-auto mr-8">
+                            <span className="text-wrap break-words w-full text-white text-sm">USER SIDE MESSAGE HERE. WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWOHOOOOOO!!!!!!</span>
+                            <span className="text-black font-bold text-[0.7rem]">00:14</span>
+                        </li>
+
+                        <li className="bg-gray-800 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-8 mr-8">
+                            <span className="text-wrap break-words w-full text-white text-sm">USER SIDE MESSAGE HERE. WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWOHOOOOOO!!!!!!</span>
+                            <span className="text-gray-400 font-bold text-[0.7rem]">00:14</span>
+                        </li> */}
+
+                        {messagesArray.map((msg, index) => (
+                            <li key={index} className="bg-green-700 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-auto mr-8">
+                                <span className="text-wrap break-words w-full text-white text-sm" dangerouslySetInnerHTML={{ __html: msg }}></span>
+                                <span className="text-black font-bold text-[0.7rem]">00:14</span>
+                            </li>
+                        ))}
+            
+                    </ul>
 
                 </div>
+
                 <div className="border-t-2 border-black w-auto flex items-end p-2">
                     <div ref={emojiPickerRef}>
                     <EmojiPicker open={emojiPickerState} theme="dark" suggestedEmojisMode="recent" skinTonesDisabled={true} onEmojiClick={handleEmojiInsert} className="!absolute bottom-11"/>
                     </div>
-                    <i className="fa-regular fa-face-smile ml-2 text-white text-lg hover:cursor-pointer p-2 hover:bg-slate-600 rounded-lg mt-1 mb-1" onClick={()=>setEmojiPickerState(!emojiPickerState)}></i>
-                    <div ref={textInputRef} className='min-h-4 max-h-28 text-white w-11/12 overflow-y-auto text-base m-2 focus:outline-none' contentEditable='true' placeholder="Type a message" autoFocus={true} onBlur={({ target }) => target.focus()} onInput={handleInput}></div>
-                    <i className="fa-solid fa-paper-plane ml-2 mr-2 text-white text-lg hover:cursor-pointer p-2 hover:bg-slate-600 rounded-lg mt-1 mb-1"></i>
+                    <i className="fa-regular fa-face-smile ml-2 text-white text-lg hover:cursor-pointer p-2 hover:bg-slate-600 rounded-lg mt-1 mb-1" onClick={() => setEmojiPickerState(!emojiPickerState)}></i>
+                    <div
+                        ref={textInputRef}
+                        className='min-h-4 max-h-28 text-white w-11/12 overflow-y-auto text-base m-2 focus:outline-none'
+                        contentEditable='true'
+                        placeholder="Type a message"
+                        autoFocus={true} onBlur={({ target }) => target.focus()}
+                        onInput={handleInput}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault(); // Prevent new line on Enter
+                                addMessage();
+                            }
+                        }}
+                        
+                        ></div>
+                    <i className="fa-solid fa-paper-plane ml-2 mr-2 text-white text-lg hover:cursor-pointer p-2 hover:bg-slate-600 rounded-lg mt-1 mb-1" onClick={addMessage}></i>
                 </div>
             </div>
         </>
