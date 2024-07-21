@@ -2,7 +2,7 @@ import React from 'react'
 
 function RequestContainer() {
 
-    const items = Array.from({ length: 50 }, (_, index) => index);
+    const items = Array.from({ length: 20 }, (_, index) => index);
 
 
     return (
@@ -15,8 +15,8 @@ function RequestContainer() {
                     <div className="flex overflow-hidden w-full">
                         <span className="text-white font-bold text-xl">Govind</span>
                         <div className="flex-grow flex justify-end items-center">
-                            <i class="fa-solid fa-trash text-xl text-red-500 hover:text-red-600"></i>
-                            <i class="fa-solid fa-circle-check text-xl ml-3 text-green-600 hover:text-green-500"></i>
+                            <i class="fa-solid fa-trash text-md text-red-500 hover:text-red-600"></i>
+                            <i class="fa-solid fa-circle-check text-md ml-3 text-green-600 hover:text-green-500"></i>
                         </div>
                     </div>
                 </li>

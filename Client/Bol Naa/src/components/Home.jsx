@@ -5,12 +5,13 @@ import Chatbox from './Chatbox';
 import SocketProvider from "../context/SocketProvider";
 import SideInfoBar from './SideInfoBar';
 import SidebarState from '../context/SidebarState';
+import UserContext from "../context/userContext";
+import axios from 'axios';
 
 
+export default function Home() {
 
-export default function Home(props) {
-
-  const { isLogin } = props;
+  const { isLogin,profile,setProfile } = useContext(UserContext)
   // const { setIsLogin } = props.setIsLogin;
   const [userSelected, setUserSelected] = useState({
     selected: false,
@@ -18,29 +19,53 @@ export default function Home(props) {
   });
   
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!isLogin.loginState) {
-      navigate("/");
-    } 
-    
+      navigate("/login");
+    }
+    if (isLogin.loginState && (profile === null || profile === undefined)) {
+      (async () => {
+        try {
+          
+          const response = await axios.get(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/api/users/getUserProfile`, {
+            headers: {
+              authorization: localStorage.getItem("authToken")
+            }
+          })
+          
+          setProfile(response.data.profile)
+
+        } catch (error) {
+          console.log(error);
+          if(error.response.data.message==="Unauthorized" || error.response.data.error){
+            navigate('/login')
+          }
+        }
+  
+      })();
+    }
+
   }, [])
 
 
 
   return (
     <>
-      <SocketProvider id={isLogin.userName}>
-        <div className='flex h-screen w-screen'>
+    {profile&&
+      <SocketProvider id={profile.userName}>
+      <div className='flex h-screen w-screen'>
 
-          <SidebarState>
-            <Sidebar setUserSelected={setUserSelected} />
-            <SideInfoBar />
-          </SidebarState>
+        <SidebarState>
+          <Sidebar setUserSelected={setUserSelected} />
+          <SideInfoBar />
+        </SidebarState>
 
-          <Chatbox />
-        </div>
-      </SocketProvider>
+        <Chatbox />
+      </div>
+    </SocketProvider>
 
+    }
     </>
   )
 }

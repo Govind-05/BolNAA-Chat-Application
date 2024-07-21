@@ -11,7 +11,7 @@ function SideInfoBar() {
 
   return (
     <div className="!w-[30rem] bg-slate-900 border-r-2 border-black flex-grow-0 flex flex-col h-screen">
-      <div className="flex items-center">
+      <div className="flex items-center" style={{width:"inherit"}}>
         {(() => {
           switch (sidebarNavigation) {
             case 'chats':

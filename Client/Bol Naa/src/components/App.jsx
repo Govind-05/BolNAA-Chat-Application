@@ -11,18 +11,13 @@ import {
 
 function App() {
 
-  const [isLogin, setIsLogin] = useState({
-    loginState:false,
-    userName:""
-  });
-
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <Login setIsLogin={setIsLogin} />,
+      path: "/login",
+      element: <Login />,
     }, {
-      path: "/home",
-      element: <Home isLogin={isLogin} setIsLogin={setIsLogin}/>
+      path: "/",
+      element: <Home />
     }
   ]);
 

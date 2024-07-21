@@ -6,13 +6,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
-export default function Login(props){
-    
-    const {setIsLogin}=props;
-    
+export default function Login(){
+        
     const navigate=useNavigate();
 
-    const {setProfile}=useContext(UserContext);
+    const {setProfile,setIsLogin}=useContext(UserContext);
     
     const [open, setOpen] = useState(false);
 
@@ -100,7 +98,7 @@ export default function Login(props){
         e.preventDefault();
 
         if (loginData.userName != "" && loginData.password != "") {
-            const response = await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/login`, loginData,
+            const response = await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/api/users/login`, loginData,
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -118,10 +116,12 @@ export default function Login(props){
                     userName:loginData.userName
                 })
                 setProfile(response.data.profile)
+                localStorage.setItem("authToken","bearer"+" "+response.data.authToken)
                 setLoginData({
                     userName:"",
                     password:""
                 })
+                console.log(response.data);
             }
         }     
     }
@@ -129,7 +129,7 @@ export default function Login(props){
     async function handleSubmitRegisterForm(e) {
         e.preventDefault();
 
-        const response = await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/post/register`, {
+        const response = await axios.post(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/api/users/register`, {
             yourName: registerData.yourName,
             userName: registerData.userName,
             password: input.password,
@@ -202,9 +202,9 @@ export default function Login(props){
         if (successfulLogin.login) {
             setIsLogin({
                 loginState: true,
-                userName: loginData.userName
             });
-            navigate('/home')
+            localStorage.setItem("loginState","true")
+            navigate('/')
         }
         setLoginData({
             userName: "",

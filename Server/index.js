@@ -1,14 +1,15 @@
+import 'dotenv/config';
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import User from "./database/models/userSchema.js";
 import Message from "./database/models/messagesSchema.js";
 import cors from "cors";
-import * as dotenv from 'dotenv';
-dotenv.config();
+import userRoutes from "./routes/userRoutes.js"
 
 import { createServer } from "http";
 import { Server } from "socket.io";
+import connectDB from "./utils/connectDB.js";
 
 const app = express();
 app.use(cors());
@@ -24,85 +25,15 @@ const io = new Server(httpServer, {
 });
 
 
-
 // mongoose.set('strictQuery', true);
 await mongoose.connect(process.env.MONGODB_URL);
 
-//REGISTERING THE USER
-app.post("/post/register", async (req, res) => {
+connectDB();
 
-    const userData = new User({
-        yourName: req.body.yourName,
-        userName: req.body.userName,
-        password: req.body.password
-    })
-    try {
-        await userData.save();
-        res.send({
-            error: false
-        })
-    } catch (error) {
-        res.send({
-            error: true
-        })
-    }
-});
+app.use('/api/users', userRoutes);
 
 app.get("/hello",(req,res)=>{
     res.send("Hello there")
-});
-
-//LOGGING IN THE USER
-app.post("/post/login", async (req, res) => {
-
-    try {
-        const response = await User.findOne({ userName: req.body.userName });
-        if (response == null) {
-            res.send({
-                error: true
-            })
-        }
-        else if (response.password === req.body.password) {
-            res.send({
-                error: false,
-                profile:{
-                    userName:response.userName,
-                    yourName:response.yourName
-                }
-            })
-        } else {
-            res.send({
-                error: true
-            })
-        }
-
-    } catch (error) {
-        res.send({
-            error: "Server Error"
-        })
-    }
-
-
-});
-
-//Checking if the user exist through the modal
-
-app.post("/post/checkUser", async (req, res) => {
-    try {
-        const response = await User.findOne({ userName: req.body.userName });
-        if (response != null) {
-            res.send({
-                error: false
-            })
-        } else {
-            res.send({
-                error: true
-            })
-        }
-    } catch (error) {
-        console.log("Error in the server-/post/checkuser");
-    }
-
 });
 
 app.post("/post/saveContacts",async (req,res)=>{
