@@ -9,7 +9,7 @@ export default function UserState(props){
     const [profile,setProfile]=useState()
     const [showMessageBox, setShowMessageBox] = useState(false)
     const [userInviteList, setUserInviteList] = useState([])
-
+    const [userRequestList, setUserRequestList] = useState([])
 
     return(
         <>
@@ -21,7 +21,9 @@ export default function UserState(props){
                 showMessageBox,
                 setShowMessageBox,
                 userInviteList,
-                setUserInviteList
+                setUserInviteList,
+                userRequestList,
+                setUserRequestList
                 }}>
                 {props.children}
             </UserContext.Provider>

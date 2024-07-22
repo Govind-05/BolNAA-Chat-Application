@@ -7,7 +7,7 @@ const userSchema = new Schema({
     userName:{ type : String , unique : true, required : true, dropDups: true },
     password:String,
     contacts:[{
-        userId : mongoose.Schema.Types.ObjectId
+        userId : String
     }]
 },{ timestamps: true });
 
