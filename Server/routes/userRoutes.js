@@ -8,7 +8,8 @@ import {
     deleteInvite,
     getUserRequests,
     deleteRequest,
-    acceptRequest
+    acceptRequest,
+    updateUserProfile
 } from '../controllers/userController.js';
 import verifyJWT from '../middlewares/verifyJWT.js';
 
@@ -33,6 +34,7 @@ router.post('/deleteRequest', verifyJWT, deleteRequest);
 
 router.post('/acceptRequest', verifyJWT, acceptRequest);
 
+router.post('/updateUserProfile', verifyJWT, updateUserProfile);
 
 
 export default router;

@@ -57,7 +57,6 @@ export const loginUser = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    console.log(req.user);
     const response = await User.findOne({ userName: req.user.userName });
     res.send({
       error: false,
@@ -77,19 +76,39 @@ export const getUserProfile = async (req, res) => {
 
 export const searchUser = async (req, res) => {
   try {
+    if(req.body.inviteUsername===req.user.userName){
+      res.send({
+        error: false,
+        searchResult: true,
+        contactExists:true
+      });
+      return;
+    }
     const response = await User.findOne({ userName: req.body.inviteUsername });
     if (response) {
-      
-      const inviteResponse=await Invite.create({
-        inviteSender: req.user.userName,
-        inviteReceiver: req.body.inviteUsername,
-      });
+      let contactExists = response.contacts.some(obj => obj.userId === req.user.userId);
+      if(contactExists){
 
         res.send({
           error: false,
           searchResult: true,
-          invite:inviteResponse
+          contactExists:true
         });
+        return;
+
+      }else{
+        const inviteResponse = await Invite.create({
+          inviteSender: req.user.userName,
+          inviteReceiver: req.body.inviteUsername,
+        });
+
+        res.send({
+          error: false,
+          searchResult: true,
+          invite: inviteResponse,
+        });
+        return;
+      }
 
     } else {
 
@@ -97,6 +116,7 @@ export const searchUser = async (req, res) => {
           error: false,
           searchResult: false,
         });
+        return;
     }
   } catch (err) {
     console.log(err);
@@ -104,7 +124,7 @@ export const searchUser = async (req, res) => {
         error: true,
         searchResult: false,
       });
-
+      return;
   }
 };
 
@@ -189,6 +209,36 @@ export const acceptRequest = async (req, res) => {
 
   } catch (err) {
     console.log("catch error",err);
+    res.status(400).send({
+      error: true,
+    });
+  }
+};
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const {yourName, userName} = req.body
+
+    if(!(req.user.userName===userName)){
+
+      const check = await User.findOne({userName:userName})
+      if(check){
+        res.send({
+          error: true,
+        });
+        return
+      }
+      
+    }
+    
+
+    const response = await User.findOneAndUpdate({userName:req.user.userName},{userName:userName,yourName:yourName})
+
+    res.send({
+      error: false,
+    });
+  } catch (err) {
+    console.log(err);
     res.status(400).send({
       error: true,
     });

@@ -229,13 +229,13 @@ export default function MessageBox(props) {
                     <div ref={emojiPickerRef}>
                     <EmojiPicker open={emojiPickerState} theme="dark" suggestedEmojisMode="recent" skinTonesDisabled={true} onEmojiClick={handleEmojiInsert} className="!absolute bottom-11"/>
                     </div>
-                    <i className="fa-regular fa-face-smile ml-2 text-white text-lg hover:cursor-pointer p-2 hover:bg-slate-600 rounded-lg mt-1 mb-1" onClick={() => setEmojiPickerState(!emojiPickerState)}></i>
+                    <i className="fa-regular fa-face-smile ml-2 text-white text-lg hover:cursor-pointer p-2 hover:bg-slate-600 rounded-lg mt-1 mb-1" onClick={() => {setEmojiPickerState(!emojiPickerState)}}></i>
                     <div
                         ref={textInputRef}
                         className='min-h-4 max-h-28 text-white w-11/12 overflow-y-auto text-base m-2 focus:outline-none'
                         contentEditable='true'
                         placeholder="Type a message"
-                        autoFocus={true} onBlur={({ target }) => target.focus()}
+                        autoFocus={true}
                         onInput={handleInput}
                         onKeyPress={(e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {

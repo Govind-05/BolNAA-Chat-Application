@@ -1,17 +1,24 @@
 import React, { useState, useContext, useEffect } from 'react'
 import UserContext from '../context/userContext';
-
 import axios from "axios"
 
 function InviteContainer() {
 
-    const {userInviteList, setUserInviteList} = useContext(UserContext)
+    const {userInviteList, setUserInviteList, profile} = useContext(UserContext)
 
     const [inviteUsername, setInviteUsername] = useState("")
-    const [searchingLabel, setSearchingLabel] = useState(0) // 0:no display  1:searching  2:user found  3:invite already  4:user not found
+    const [searchingLabel, setSearchingLabel] = useState(0) // 0:no display  1:searching  2:user found  3:invite already  4:user not found 5:user already added
 
     const handleSubmit = async () => {
         setSearchingLabel(1)
+
+        if (inviteUsername === profile.userName) {
+            setSearchingLabel(5)
+            setTimeout(() => {
+                setSearchingLabel(0)
+            }, 2500);
+            return;
+        }
 
         for (let index = 0; index < userInviteList.length; index++) {
             if(userInviteList[index].inviteReceiver===inviteUsername){
@@ -34,6 +41,13 @@ function InviteContainer() {
             )
 
             if (response.data.searchResult) {
+                if (response.data.contactExists) {
+                    setSearchingLabel(5)
+                    setTimeout(() => {
+                        setSearchingLabel(0)
+                    }, 2500);
+                    return;
+                }
                 setSearchingLabel(2)
                 setTimeout(() => {
                     setSearchingLabel(0)
@@ -107,10 +121,15 @@ function InviteContainer() {
 
     return (
         <div className="m-4">
-            <form className="login-form flex-row">
+            <div className="login-form flex-row" 
+                onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                        handleSubmit();
+                    }
+                }}>
                 <input className="!w-80 focus:border-green-400 focus:border-2 text-gray-400 font-semibold bg-black" type="text" autoCorrect="off" autoComplete="off" placeholder='Username' name="inviteUsername" value={inviteUsername} onChange={(e) => setInviteUsername(e.target.value)} />
                 <button className="w-20 h-10 ml-2 rounded-lg register-button bg-green-600 hover:bg-green-500 font-bold" type="button" onClick={handleSubmit}>Send</button>
-            </form>
+            </div>
             {/* <div>
                 <i className="fa-solid fa-spinner animate-spin text-green-500"></i>
                 <span className="text-gray-400 ml-2">Searching for user</span>
@@ -148,6 +167,13 @@ function InviteContainer() {
                             <div>
                                 <i className="fa-solid fa-circle-xmark text-red-500"></i>
                                 <span className="text-gray-400 ml-2">User not found</span>
+                            </div>
+                        )
+                    case 5:
+                        return (
+                            <div>
+                                <i className="fa-solid fa-exclamation text-red-500"></i>
+                                <span className="text-gray-400 ml-2">User alread Added</span>
                             </div>
                         )
                     default:

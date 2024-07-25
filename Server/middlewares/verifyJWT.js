@@ -4,7 +4,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const verifyJWT = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
-  console.log("secret: ",JWT_SECRET);
 
   if (!token) {
     // console.log("no token");
