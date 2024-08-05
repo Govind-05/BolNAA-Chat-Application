@@ -6,13 +6,17 @@ import User from "./database/models/userSchema.js";
 import Message from "./database/models/messagesSchema.js";
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js"
-
+import chatRoutes from "./routes/chatRoutes.js"
+import imageUploadRoutes from "./routes/imageUploadRoutes.js"
 import { createServer } from "http";
 import { Server } from "socket.io";
 import connectDB from "./utils/connectDB.js";
+import { Redis } from "ioredis"
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: true
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -30,7 +34,12 @@ await mongoose.connect(process.env.MONGODB_URL);
 
 connectDB();
 
+const sub = new Redis();
+const pub = new Redis();
+
 app.use('/api/users', userRoutes);
+app.use('/api/chats', chatRoutes);
+app.use('/api/uploadImage', imageUploadRoutes);
 
 app.get("/hello",(req,res)=>{
     res.send("Hello there")
@@ -114,19 +123,78 @@ app.post("/post/deleteContact",async (req,res) => {
 
 //Socket Server Starts here
 io.on("connection", (socket) => {
+    console.log("New Connection");
+
     const id = socket.handshake.query.id;
     socket.join(id)
-    socket.on("send-message", (receiver) => {
-        socket.to(receiver.userName).emit("received-message", receiver.userName, receiver.sendMes, receiver.sender);
+
+    sub.subscribe("MessageChannel", (err) => {
+        if (err) {
+            console.error("Failed to subscribe: %s", err.message);
+        } else {
+            console.log(
+                `Subscribed successfully! This client ${id} is Subscribed.`
+            );
+        }
     });
+
+    socket.on("send-message", async (socketData) => {
+        console.log(socketData);
+
+
+        console.log("receiver online");
+        const currentTime = new Date()
+        // socket.to(socketData.receiver).emit("message-receive", { sender: socketData.sender, message: socketData.message, time: `${currentTime.getHours()}:${currentTime.getMinutes().toString().padStart(2, '0')}` });
+
+        await pub.publish("MessageChannel", JSON.stringify({
+            sender: socketData.sender,
+            message: socketData.message,
+            receiver: socketData.receiver,
+            time: `${currentTime.getHours()}:${currentTime.getMinutes().toString().padStart(2, '0')}`
+        }
+        ));
+
+        await Message.create({
+            sender: socketData.sender,
+            receiver: socketData.receiver,
+            message: socketData.message,
+            time: `${currentTime.getHours()}:${currentTime.getMinutes().toString().padStart(2, '0')}`
+        })
+
+    });
+
+    socket.on("disconnect", (reason) => {
+        console.log("Client Disconnected");
+        
+      });
 
 });
 
 // Socket Server Ends here
 
+sub.on("message",(channel,message)=>{
+    console.log(`Received ${message} from ${channel}`);
+    const msgObj=JSON.parse(message)
+
+    const roomExists = io.sockets.adapter.rooms.has(msgObj.receiver);
+    const currentTime = new Date()
+
+    if (roomExists) {
+        console.log(`Room ${msgObj.receiver} exist`);
+        io.to(msgObj.receiver).emit("message-receive",{ sender: msgObj.sender, message: msgObj.message, time: msgObj.time});
+    } else {
+        console.log(`Room ${msgObj.receiver} does not exist`);
+        // Optionally handle the case where the room doesn't exist
+    }
+
+})
+
 const SERVER_PORT=process.env.SERVER_PORT || 3000
 
-httpServer.listen(SERVER_PORT);
+httpServer.listen(SERVER_PORT,()=>{
+    console.log("Server Listening On Port",SERVER_PORT);
+    
+});
 
 // const PORT=process.env.PORT || 3000;
 

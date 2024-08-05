@@ -116,6 +116,7 @@ export default function Login(){
                     userName:loginData.userName
                 })
                 setProfile(response.data.profile)
+
                 localStorage.setItem("authToken","bearer"+" "+response.data.authToken)
                 setLoginData({
                     userName:"",
@@ -212,6 +213,11 @@ export default function Login(){
         })
 
     }, [successfulLogin])
+
+    useEffect(()=>{
+        localStorage.removeItem("authToken")
+        setIsLogin(false)
+    },[])
 
     return (
         <>

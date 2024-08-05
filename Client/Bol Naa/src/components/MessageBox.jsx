@@ -120,8 +120,8 @@ export default function MessageBox(props) {
     //     // }
     // }, [userName]);
     
-  
-    const {setShowMessageBox} = useContext(UserContext);
+    const {socket} = useContext(SocketContext)
+    const {setShowMessageBox,setMessageBoxValue,messageBoxValue,profile} = useContext(UserContext);
     
     const emojiPickerRef = useRef(null)
     const textInputRef = useRef(null)
@@ -152,11 +152,47 @@ export default function MessageBox(props) {
 
     const addMessage = () => {
         if (textInput.trim() === '') return;
-
-        setMessagesArray([...messagesArray, textInput]);
+        const currentTime = new Date();
+        setMessagesArray(prevMessages=>([...prevMessages,
+            {
+                message:textInput,
+                type:"Send",
+                time:`${currentTime.getHours()}:${currentTime.getMinutes().toString().padStart(2, '0')}`
+            }
+        ]));
         setTextInput('');
         textInputRef.current.innerHTML = '';
+
+        const socketData={
+            sender:profile.userName,
+            receiver:messageBoxValue.receiverUserName,
+            message:textInput
+        }
+
+        socket.emit("send-message",socketData)
+
     };
+
+    useEffect(() => {
+        socket.on('message-receive', (socketData) => {
+            console.log(socketData);
+
+            if(socketData.sender===messageBoxValue.receiverUserName){
+                setMessagesArray((prevMessages) => [...prevMessages,
+                    {
+                        message:socketData.message,
+                        type:"Received",
+                        time:socketData.time
+                    }
+                ]);
+            }
+            
+        });
+
+        return () => {
+            socket.off('message-receive');
+        };
+    }, [socket]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -167,10 +203,40 @@ export default function MessageBox(props) {
 
         document.addEventListener('mousedown', handleClickOutside);
 
+        (async () => {
+            const response = await axios.get(`${import.meta.env.VITE_APP_PROXY_DOMAIN}/api/chats/getChatMessages?receiverUserName=${messageBoxValue.receiverUserName}`, {
+                headers: {
+                    authorization: localStorage.getItem("authToken")
+                }
+            })
+            const sortedMessages = response.data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+            const msgArray=[]
+
+            sortedMessages.map(msg=>(
+                msg.sender===`${messageBoxValue.receiverUserName}` ? (
+                    msgArray.push({
+                        message:msg.message,
+                        type:"Received",
+                        time:msg.time
+                    })
+                ) : (
+                    msgArray.push({
+                        message:msg.message,
+                        type:"Send",
+                        time:msg.time
+                    })
+                )
+            ))
+
+            setMessagesArray(msgArray)
+
+        })();
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [messageBoxValue.receiverUserName]);
 
     return (
         <>
@@ -194,9 +260,14 @@ export default function MessageBox(props) {
 
             <div className="bg-slate-900 flex-grow flex flex-col overflow-hidden">
                 <div className="flex border-b-2 border-black items-center">
+                {(messageBoxValue.receiverDP!=="" && setMessageBoxValue,messageBoxValue.receiverDP)?(
+                    <img src={setMessageBoxValue,messageBoxValue.receiverDP} alt="profile" className="h-12 w-12 rounded-full m-2"/>
+                ):(
                     <img src="/images/User_profile.jpg" alt="profile" className="h-12 w-12 rounded-full m-2"/>
-                    <span className="text-white text-xl font-semibold">Govind</span>
-                    <div className="ml-auto mr-2 p-1 pl-3 pr-2 hover:bg-slate-600 rounded-md cursor-pointer" onClick={()=>setShowMessageBox(false)} >
+                )}
+                    
+                    <span className="text-white text-xl font-semibold">{setMessageBoxValue,messageBoxValue.receiverFullName}</span>
+                    <div className="ml-auto mr-2 p-1 pl-3 pr-2 hover:bg-slate-600 rounded-md cursor-pointer" onClick={()=>{setShowMessageBox(false);setMessageBoxValue({})}} >
                         <i className="fa-solid fa-location-arrow rotate-[230deg] text-white text-2xl "></i>
                     </div>
                 </div>
@@ -207,18 +278,26 @@ export default function MessageBox(props) {
                         {/* <li className="bg-green-700 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-auto mr-8">
                             <span className="text-wrap break-words w-full text-white text-sm">USER SIDE MESSAGE HERE. WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWOHOOOOOO!!!!!!</span>
                             <span className="text-black font-bold text-[0.7rem]">00:14</span>
-                        </li>
+                        </li> */}
 
-                        <li className="bg-gray-800 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-8 mr-8">
+                        {/* <li className="bg-gray-800 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-8 mr-8">
                             <span className="text-wrap break-words w-full text-white text-sm">USER SIDE MESSAGE HERE. WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWOHOOOOOO!!!!!!</span>
                             <span className="text-gray-400 font-bold text-[0.7rem]">00:14</span>
                         </li> */}
 
                         {messagesArray.map((msg, index) => (
-                            <li key={index} className="bg-green-700 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-auto mr-8">
-                                <span className="text-wrap break-words w-full text-white text-sm" dangerouslySetInnerHTML={{ __html: msg }}></span>
-                                <span className="text-black font-bold text-[0.7rem]">00:14</span>
-                            </li>
+                            msg.type === "Send" ? (
+                                <li key={index} className="bg-green-700 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-auto mr-8">
+                                    <span className="text-wrap break-words w-full text-white text-sm" dangerouslySetInnerHTML={{ __html: msg.message }}></span>
+                                    <span className="text-black font-bold text-[0.7rem]">{msg.time}</span>
+                                </li>
+
+                            ) : (
+                                <li key={index} className="bg-gray-800 max-w-[55%] w-fit p-2 flex flex-col items-end rounded-md m-2 ml-8 mr-8">
+                                    <span className="text-wrap break-words w-full text-white text-sm" dangerouslySetInnerHTML={{ __html: msg.message }}></span>
+                                    <span className="text-gray-400 font-bold text-[0.7rem]">{msg.time}</span>
+                                </li>
+                            )
                         ))}
             
                     </ul>

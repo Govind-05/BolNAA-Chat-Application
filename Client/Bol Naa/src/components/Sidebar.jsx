@@ -5,10 +5,15 @@ import SocketContext from "../context/SocketContext";
 import { IoMenu } from "react-icons/io5";
 import axios from "axios";
 import SidebarContext from '../context/SidebarContext';
+import { useNavigate } from 'react-router-dom';
+
 
 
 
 export default function Sidebar(props) {
+
+    const navigate=useNavigate()
+
 
     const { setUserSelected } = props;
 
@@ -78,6 +83,12 @@ export default function Sidebar(props) {
 
     }
 
+    const handleLogout = async () => {
+        localStorage.removeItem("authToken")
+        localStorage.removeItem("loginState")
+        navigate("/login")
+    }
+
     return (
         <>
             {/* <div className='home-sidebar-container'>
@@ -121,10 +132,10 @@ export default function Sidebar(props) {
                             <i className="fa-solid fa-user-gear text-gray-300 text-md p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Profile</span></i>
                         </li>
                         <li className="hover:bg-slate-600 cursor-pointer m-1 rounded-md" onClick={()=>setSidebarNavigation("notifications")}>
-                            <i className="fa-solid fa-bell text-gray-300 text-md p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Notifications</span></i>
+                            <i className="fa-solid fa-bell text-gray-300 text-md p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Updates</span></i>
                         </li>
-                        <li className="mt-auto mb-2 hover:bg-slate-600 cursor-pointer m-1 rounded-md" onClick={()=>setSidebarNavigation("settings")}>
-                            <i className="fa-solid fa-gear text-gray-300 text-lg p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Settings</span></i>
+                        <li className="mt-auto mb-2 hover:bg-slate-600 cursor-pointer m-1 rounded-md" onClick={handleLogout}>
+                            <i className="fa-solid fa-power-off text-red-500 text-lg p-2 m-2 rounded-md cursor-pointer"><span className={`transition-all duration-[0.3s] ${sidebarOpen ? 'text-md text-gray-300 ml-2' : 'text-[0px]'}`}>Log Out</span></i>
                         </li>
                     </ul>
                 </div>

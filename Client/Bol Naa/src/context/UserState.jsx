@@ -6,10 +6,15 @@ export default function UserState(props){
     const [isLogin, setIsLogin] = useState({
         loginState:localStorage.getItem("loginState")==="true"?true:false,
       });
+
     const [profile,setProfile]=useState()
+
     const [showMessageBox, setShowMessageBox] = useState(false)
+    const [messageBoxValue, setMessageBoxValue] = useState({})
+
     const [userInviteList, setUserInviteList] = useState([])
     const [userRequestList, setUserRequestList] = useState([])
+    const [userContactsList, setUserContactsList] = useState([])
 
     return(
         <>
@@ -23,7 +28,11 @@ export default function UserState(props){
                 userInviteList,
                 setUserInviteList,
                 userRequestList,
-                setUserRequestList
+                setUserRequestList,
+                userContactsList,
+                setUserContactsList,
+                messageBoxValue,
+                setMessageBoxValue
                 }}>
                 {props.children}
             </UserContext.Provider>

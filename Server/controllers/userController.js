@@ -23,7 +23,7 @@ try {
 
 export const loginUser = async (req, res) => {
   try {
-    const response = await User.findOne({ userName: req.body.userName });
+    const response = await User.findOne({ userName: req.body.userName }).lean();
     if (response == null) {
         res.send({
             error: true
@@ -31,13 +31,11 @@ export const loginUser = async (req, res) => {
     }
     else if (response.password === req.body.password) {
         const authToken = await jwt.sign({ userName:response.userName, userId:response._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        delete response.password;
+        
         res.send({
             error: false,
-            profile:{
-                userName:response.userName,
-                yourName:response.yourName,
-                contacts:response.contacts
-            },
+            profile:{...response},
             authToken:authToken
         })
     } else {
@@ -57,14 +55,11 @@ export const loginUser = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    const response = await User.findOne({ userName: req.user.userName });
+    const response = await User.findOne({ userName: req.user.userName }).lean();
+    delete response.password
     res.send({
       error: false,
-      profile: {
-        userName: response.userName,
-        yourName: response.yourName,
-        contacts: response.contacts,
-      },
+      profile: {...response},
     });
   } catch (err) {
     console.log(err);
@@ -194,8 +189,8 @@ export const acceptRequest = async (req, res) => {
     });
 
     const userId=req.user.userId;
-    const contact = await User.findOne({ userName: req.body.inviteSender });
-    const contactId = contact._id.toString();
+    const contact = await User.findOne({ userName: req.body.inviteSender }).lean();
+    const contactId = contact._id;
 
     await User.findByIdAndUpdate(
       userId,
