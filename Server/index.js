@@ -1,17 +1,22 @@
+import 'dotenv/config';
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import User from "./database/models/userSchema.js";
 import Message from "./database/models/messagesSchema.js";
 import cors from "cors";
-import * as dotenv from 'dotenv';
-dotenv.config();
-
+import userRoutes from "./routes/userRoutes.js"
+import chatRoutes from "./routes/chatRoutes.js"
+import imageUploadRoutes from "./routes/imageUploadRoutes.js"
 import { createServer } from "http";
 import { Server } from "socket.io";
+import connectDB from "./utils/connectDB.js";
+import { Redis } from "ioredis"
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: true
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -24,81 +29,20 @@ const io = new Server(httpServer, {
 });
 
 
+// mongoose.set('strictQuery', true);
+await mongoose.connect(process.env.MONGODB_URL);
 
-mongoose.set('strictQuery', true);
-mongoose.connect(process.env.MONGODB_URL);
+connectDB();
 
-//REGISTERING THE USER
-app.post("/post/register", async (req, res) => {
+const sub = new Redis();
+const pub = new Redis();
 
-    const userData = new User({
-        yourName: req.body.yourName,
-        userName: req.body.userName,
-        password: req.body.password
-    })
-    try {
-        await userData.save();
-        res.send({
-            error: false
-        })
-    } catch (error) {
-        res.send({
-            error: true
-        })
-    }
-});
+app.use('/api/users', userRoutes);
+app.use('/api/chats', chatRoutes);
+app.use('/api/uploadImage', imageUploadRoutes);
 
 app.get("/hello",(req,res)=>{
     res.send("Hello there")
-});
-
-//LOGGING IN THE USER
-app.post("/post/login", async (req, res) => {
-
-    try {
-        const response = await User.findOne({ userName: req.body.userName });
-        if (response == null) {
-            res.send({
-                error: true
-            })
-        }
-        else if (response.password === req.body.password) {
-            res.send({
-                error: false
-            })
-        } else {
-            res.send({
-                error: true
-            })
-        }
-
-    } catch (error) {
-        res.send({
-            error: "Server Error"
-        })
-    }
-
-
-});
-
-//Checking if the user exist through the modal
-
-app.post("/post/checkUser", async (req, res) => {
-    try {
-        const response = await User.findOne({ userName: req.body.userName });
-        if (response != null) {
-            res.send({
-                error: false
-            })
-        } else {
-            res.send({
-                error: true
-            })
-        }
-    } catch (error) {
-        console.log("Error in the server-/post/checkuser");
-    }
-
 });
 
 app.post("/post/saveContacts",async (req,res)=>{
@@ -179,19 +123,78 @@ app.post("/post/deleteContact",async (req,res) => {
 
 //Socket Server Starts here
 io.on("connection", (socket) => {
+    console.log("New Connection");
+
     const id = socket.handshake.query.id;
     socket.join(id)
-    socket.on("send-message", (receiver) => {
-        socket.to(receiver.userName).emit("received-message", receiver.userName, receiver.sendMes, receiver.sender);
+
+    sub.subscribe("MessageChannel", (err) => {
+        if (err) {
+            console.error("Failed to subscribe: %s", err.message);
+        } else {
+            console.log(
+                `Subscribed successfully! This client ${id} is Subscribed.`
+            );
+        }
     });
+
+    socket.on("send-message", async (socketData) => {
+        console.log(socketData);
+
+
+        console.log("receiver online");
+        const currentTime = new Date()
+        // socket.to(socketData.receiver).emit("message-receive", { sender: socketData.sender, message: socketData.message, time: `${currentTime.getHours()}:${currentTime.getMinutes().toString().padStart(2, '0')}` });
+
+        await pub.publish("MessageChannel", JSON.stringify({
+            sender: socketData.sender,
+            message: socketData.message,
+            receiver: socketData.receiver,
+            time: `${currentTime.getHours()}:${currentTime.getMinutes().toString().padStart(2, '0')}`
+        }
+        ));
+
+        await Message.create({
+            sender: socketData.sender,
+            receiver: socketData.receiver,
+            message: socketData.message,
+            time: `${currentTime.getHours()}:${currentTime.getMinutes().toString().padStart(2, '0')}`
+        })
+
+    });
+
+    socket.on("disconnect", (reason) => {
+        console.log("Client Disconnected");
+        
+      });
 
 });
 
 // Socket Server Ends here
 
+sub.on("message",(channel,message)=>{
+    console.log(`Received ${message} from ${channel}`);
+    const msgObj=JSON.parse(message)
+
+    const roomExists = io.sockets.adapter.rooms.has(msgObj.receiver);
+    const currentTime = new Date()
+
+    if (roomExists) {
+        console.log(`Room ${msgObj.receiver} exist`);
+        io.to(msgObj.receiver).emit("message-receive",{ sender: msgObj.sender, message: msgObj.message, time: msgObj.time});
+    } else {
+        console.log(`Room ${msgObj.receiver} does not exist`);
+        // Optionally handle the case where the room doesn't exist
+    }
+
+})
+
 const SERVER_PORT=process.env.SERVER_PORT || 3000
 
-httpServer.listen(SERVER_PORT);
+httpServer.listen(SERVER_PORT,()=>{
+    console.log("Server Listening On Port",SERVER_PORT);
+    
+});
 
 // const PORT=process.env.PORT || 3000;
 

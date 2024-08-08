@@ -4,7 +4,7 @@
         font-size: 4rem;
     }
 
-    .login-container img {
+    .title-icon {
         width: 3.5rem;
     }
 
@@ -56,11 +56,6 @@
 
     .chat-bottom-border{
         margin-top: 2px;
-    }
-
-    .home-chatbox-container{
-        width: 100%;
-        background-color: #222831
     }
 
     .message-box-container{

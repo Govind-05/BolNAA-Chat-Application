@@ -5,8 +5,9 @@ const { Schema } = mongoose;
 const messagesSchema = new Schema({
     sender:String,
     receiver:String,
-    message:String
-});
+    message:String,
+    time:String
+},{timestamps:true});
 
 const Message=mongoose.model("Message",messagesSchema);
 
